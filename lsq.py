@@ -39,13 +39,32 @@ class MenuBar(QtWidgets.QMenuBar):
         print(self.fileName)
         csvData = self.readFile(self.fileName)
         global ax
-        ax.plot(csvData.iloc[:,[0]],csvData.iloc[:,[1]])
+        ax.scatter(csvData.iloc[:,[0]],csvData.iloc[:,[1]])
         window.setPlot()
+        self.leastSquaresLine(self.convertToArray(csvData))
+        
 
     def readFile(self, file):
         csvData = pd.read_csv(file)
         return csvData
-        
+    
+    def convertToArray(self, csvData):
+        array = csvData.to_numpy()
+        print(array)
+        return array
+    
+    def leastSquaresLine(self, array):
+            array = np.c_[np.ones(array.shape[0]), array]
+            A = array[:, [0,1]]
+            b = array[:, [2]]
+
+            aTrA = np.linalg.inv(np.matmul(np.transpose(A), A))
+            aTrb = np.matmul(np.transpose(A), b)
+
+            lineParams = np.matmul(aTrA, aTrb)
+            global ax 
+            ax.axline((0,lineParams[0][0]), slope=lineParams[1][0])
+
 
         
         
