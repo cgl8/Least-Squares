@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt 
 import numpy as np 
-import matplotlib as mpl 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import pandas as pd 
-import csv
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 import sys 
 
 app = QtWidgets.QApplication(sys.argv)
@@ -40,7 +38,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.fileName, self.fileType = QtWidgets.QFileDialog.getOpenFileName(
             self, "Open File", ""
             , "Comma separated values (*.csv);;Excel File (*.xlsx *.xls)")
-            # Add excel file functionality?
+            # Add excel file functionality
         print(self.fileName)
         csvData = self.readFile(self.fileName)
         ax.scatter(csvData.iloc[:,[0]],csvData.iloc[:,[1]])
@@ -82,4 +80,4 @@ class MenuBar(QtWidgets.QMenuBar):
 window = MainWindow()
 sys.exit(app.exec())
 
-# Make work for more than 2 dimensional datasets
+# Make work for more than 2 dimensional datasets?
