@@ -30,18 +30,32 @@ class MenuBar(QtWidgets.QMenuBar):
         super(MenuBar, self).__init__()
         self.fileMenu = self.addMenu("File")
         self.actOpen = self.fileMenu.addAction("Open")
+        self.actRandom = self.fileMenu.addAction("Randomise")
+        self.actRandom.triggered.connect(self.randomiseData)
         self.actOpen.triggered.connect(self.fileOpen)
 
     def fileOpen(self):
+        global ax
+        ax.clear()
         self.fileName, self.fileType = QtWidgets.QFileDialog.getOpenFileName(
             self, "Open File", ""
             , "Comma separated values (*.csv);;Excel File (*.xlsx *.xls)")
+            # Add excel file functionality?
         print(self.fileName)
         csvData = self.readFile(self.fileName)
-        global ax
         ax.scatter(csvData.iloc[:,[0]],csvData.iloc[:,[1]])
         window.setPlot()
         self.leastSquaresLine(self.convertToArray(csvData))
+        
+    def randomiseData(self):
+        global ax
+        ax.clear()
+        yVals = np.random.randint(-50, 50, size = 10)
+        xVals = [-1,0,1,2,3,4,5,6,7,8]
+        dataset = np.c_[np.array(np.transpose(xVals)), np.transpose(yVals)]
+        ax.scatter(xVals,yVals)
+        self.leastSquaresLine(dataset)
+        window.setPlot()
         
 
     def readFile(self, file):
@@ -65,18 +79,7 @@ class MenuBar(QtWidgets.QMenuBar):
             global ax 
             ax.axline((0,lineParams[0][0]), slope=lineParams[1][0])
 
-
-        
-        
-        
-
-
 window = MainWindow()
 sys.exit(app.exec())
-
-fig, ax = plt.subplots()  # Create a figure containing a single axes.
-ax.plot([1, 2, 3, 4], [1, 4, 2, 3])  # Plot some data on the axes.
-
-#plt.show()
 
 # Make work for more than 2 dimensional datasets
