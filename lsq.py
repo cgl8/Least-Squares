@@ -3,12 +3,13 @@ import numpy as np
 import matplotlib as mpl 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import pandas as pd 
+import csv
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys 
 
-FILE = None
-
 app = QtWidgets.QApplication(sys.argv)
+fig, ax = plt.subplots() #Main figure and axes
+
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self): 
@@ -16,12 +17,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Least-Squares calculator")
         self.setFixedSize(500, 300)
         self.show()
-        self.initialplot()
+        self.setPlot()
         menu = MenuBar()
         self.setMenuBar(menu)
 
-    def initialplot(self):
-        fig, ax = plt.subplots()
+    def setPlot(self):
         self.setCentralWidget(FigureCanvas(fig))
 
 class MenuBar(QtWidgets.QMenuBar):
@@ -33,8 +33,21 @@ class MenuBar(QtWidgets.QMenuBar):
         self.actOpen.triggered.connect(self.fileOpen)
 
     def fileOpen(self):
-        self.fileName = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Open File", "", "Comma separated values (*.csv);;Excel File (*.xlsx *.xls)")
+        self.fileName, self.fileType = QtWidgets.QFileDialog.getOpenFileName(
+            self, "Open File", ""
+            , "Comma separated values (*.csv);;Excel File (*.xlsx *.xls)")
+        print(self.fileName)
+        csvData = self.readFile(self.fileName)
+        global ax
+        ax.plot(csvData.iloc[:,[0]],csvData.iloc[:,[1]])
+        window.setPlot()
+
+    def readFile(self, file):
+        csvData = pd.read_csv(file)
+        return csvData
+        
+
+        
         
         
 
