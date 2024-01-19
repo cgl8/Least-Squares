@@ -40,7 +40,7 @@ $\hat{\vec{b}} = proj_{Col(A)}(\vec{b})$
 
 Any least squares solution must thus satisfy the equation $A\hat{\vec{x}} = proj_{Col(A)}(\vec{b})$. This equation must be consistent, since $\hat{\vec{b}}$ is an element of the column space of A.
 
-We know that $\vec{b} - \hat{\vec{b}}$ must be orthogonal to the column space of A, hence $0=<$ $a_i, \vec{b} - \hat{\vec{b}}> = <$ $a_i, \vec{b} - A\hat{\vec{x}}>$, where $a_i$ represents the columns of $A$ for all $i = 1,2,3,\ldots,n$. Hence:
+We know that $\vec{b} - \hat{\vec{b}}$ must be orthogonal to the column space of A, hence $0\ =\ <$ $a_i, \vec{b} - \hat{\vec{b}}> \ =\  <$ $a_i, \vec{b} - A\hat{\vec{x}}>$, where $a_i$ represents the columns of $A$ for all $i = 1,2,3,\ldots,n$. Thus:
 
 ```math
 \begin{eqnarray}
