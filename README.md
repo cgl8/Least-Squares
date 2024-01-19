@@ -1,6 +1,6 @@
 # Least-Squares
 
-Adds a line of best fit to a dataset using the Least-Squares method. This project is to supplement my OWN LEARNING.
+A fun way to add a line of best fit to a dataset using the Least-Squares method. This project is to supplement my OWN LEARNING.
 
 
 ## Method
