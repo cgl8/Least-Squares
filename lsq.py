@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets
 import sys 
 
 app = QtWidgets.QApplication(sys.argv)
+dataset = None
 fig, ax = plt.subplots() #Main figure and axes
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -26,14 +27,29 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def __init__(self):
         super(MenuBar, self).__init__()
+        self.setMenus()
+        self.setActions()
+        self.connectActions()
+
+    
+    def setMenus(self):
         self.fileMenu = self.addMenu("File")
+        self.fitMenu = self.addMenu("Fit")
+
+    def setActions(self):
         self.actOpen = self.fileMenu.addAction("Open")
         self.actRandom = self.fileMenu.addAction("Randomise")
+
+        self.actLinear = self.fitMenu.addAction("Linear")
+
+    def connectActions(self):
         self.actRandom.triggered.connect(self.randomiseData)
         self.actOpen.triggered.connect(self.fileOpen)
+        self.actLinear.triggered.connect(self.linLine)
 
     def fileOpen(self):
         global ax
+        global dataset
         ax.clear()
         self.fileName, self.fileType = QtWidgets.QFileDialog.getOpenFileName(
             self, "Open File", ""
@@ -41,18 +57,18 @@ class MenuBar(QtWidgets.QMenuBar):
             # Add excel file functionality
         print(self.fileName)
         csvData = self.readFile(self.fileName)
+        dataset = self.convertToArray(csvData)
         ax.scatter(csvData.iloc[:,[0]],csvData.iloc[:,[1]])
         window.setPlot()
-        self.leastSquaresLine(self.convertToArray(csvData))
         
     def randomiseData(self):
         global ax
+        global dataset
         ax.clear()
         yVals = np.random.randint(-50, 50, size = 10)
         xVals = [-1,0,1,2,3,4,5,6,7,8]
         dataset = np.c_[np.array(np.transpose(xVals)), np.transpose(yVals)]
         ax.scatter(xVals,yVals)
-        self.leastSquaresLine(dataset)
         window.setPlot()
         
 
@@ -65,8 +81,10 @@ class MenuBar(QtWidgets.QMenuBar):
         print(array)
         return array
     
-    def leastSquaresLine(self, array):
-            array = np.c_[np.ones(array.shape[0]), array]
+    def linLine(self):
+            global dataset
+            global ax 
+            array = np.c_[np.ones(dataset.shape[0]), dataset]
             A = array[:, [0,1]]
             b = array[:, [2]]
 
@@ -74,8 +92,8 @@ class MenuBar(QtWidgets.QMenuBar):
             aTrb = np.matmul(np.transpose(A), b)
 
             lineParams = np.matmul(aTrA, aTrb)
-            global ax 
             ax.axline((0,lineParams[0][0]), slope=lineParams[1][0])
+            window.setPlot()
 
 window = MainWindow()
 sys.exit(app.exec())
