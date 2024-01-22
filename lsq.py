@@ -144,15 +144,38 @@ class MenuBar(QtWidgets.QMenuBar):
         self.popup.setFixedSize(200,100)
 
     def fitPoly(self, degree):
-        xs = dataset[:, [0]]
-        A = np.ones(dataset.shape[0])
-        i = 1
-        while (degree > 0):
-            A = np.c_[A,(xs**i)]
-            i += 1
-            degree -= 1
-        print(A)
+        global dataset
+        global ax
+        xlim_original = ax.get_xlim()
+        ylim_original = ax.get_ylim()
+        maxDeg = degree
 
+        xs = dataset[:, [0]].astype(np.float64)
+        b = dataset[:, [1]].astype(np.float64)
+
+        A = np.column_stack([xs**i for i in range(degree + 1)]).astype(np.float64)
+
+        aTrA = np.linalg.inv(np.matmul(np.transpose(A), A))
+        aTrb = np.matmul(np.transpose(A), b)
+        lineParams = np.matmul(aTrA, aTrb) 
+
+        def f(x):
+            sum = 0
+            j = 0
+            while (j <= maxDeg):
+                sum += lineParams[j,0] * x**j
+                j += 1
+            return sum
+    
+        xVals = np.linspace(ax.get_xlim()[0], ax.get_xlim()[1])
+        yVals = f(xVals)
+        ax.plot(xVals,yVals)
+        ax.set_title(f"buh")
+
+        ax.set_xlim(xlim_original)
+        ax.set_ylim(ylim_original)
+        window.setPlot()
+        
 
 class polyPopUp(QtWidgets.QWidget):
     def __init__(self):
