@@ -1,8 +1,10 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget
 import matplotlib.pyplot as plt 
 import numpy as np 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import pandas as pd 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import sys 
 
 app = QtWidgets.QApplication(sys.argv)
@@ -17,8 +19,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setFixedSize(500, 300)
         self.show()
         self.setPlot()
-        menu = MenuBar()
-        self.setMenuBar(menu)
+        self.menu = MenuBar()
+        self.setMenuBar(self.menu)
 
     def setPlot(self):
         self.setCentralWidget(FigureCanvas(fig))
@@ -42,12 +44,14 @@ class MenuBar(QtWidgets.QMenuBar):
 
         self.actLinear = self.fitMenu.addAction("Linear")
         self.actLog = self.fitMenu.addAction("Logarithmic")
+        self.actPoly = self.fitMenu.addAction("Polynomial")
 
     def connectActions(self):
         self.actRandom.triggered.connect(self.randomiseData)
         self.actOpen.triggered.connect(self.fileOpen)
         self.actLinear.triggered.connect(self.linLine)
         self.actLog.triggered.connect(self.logLine)
+        self.actPoly.triggered.connect(self.polyLine)
 
     def fileOpen(self):
         global ax
@@ -67,8 +71,8 @@ class MenuBar(QtWidgets.QMenuBar):
         global ax
         global dataset
         ax.clear()
-        yVals = np.random.randint(-50, 50, size = 10)
-        xVals = [-1,2,3,4,5,6,7,8,9,10]
+        xVals = np.linspace(1,100)
+        yVals = np.cumsum(np.random.randint(-50, 50, size = xVals.size))
         dataset = np.c_[np.array(np.transpose(xVals)), np.transpose(yVals)]
         ax.scatter(xVals,yVals)
         window.setPlot()
@@ -133,6 +137,44 @@ class MenuBar(QtWidgets.QMenuBar):
             ax.set_xlim(xlim_original)
             ax.set_ylim(ylim_original)
             window.setPlot()
+
+    def polyLine(self): # y = ax^n + bx^(n-1) + ... + wx + z
+        self.popup = polyPopUp()
+        self.popup.show()
+        self.popup.setFixedSize(200,100)
+
+    def fitPoly(self, degree):
+        xs = dataset[:, [0]]
+        A = np.ones(dataset.shape[0])
+        i = 1
+        while (degree > 0):
+            A = np.c_[A,(xs**i)]
+            i += 1
+            degree -= 1
+        print(A)
+
+
+class polyPopUp(QtWidgets.QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+        form = QtWidgets.QVBoxLayout()
+        self.setLayout(form)
+        label = QtWidgets.QLabel()
+        label.setText("Polynomial degree")
+        form.addWidget(label)
+
+        self.inputBox = QtWidgets.QSpinBox()
+        form.addWidget(self.inputBox)
+
+        contBtn = QtWidgets.QPushButton()
+        contBtn.setText("Confirm")
+        form.addWidget(contBtn)
+        contBtn.released.connect(self.confirmDegree)
+    
+    def confirmDegree(self):
+        degree = self.inputBox.value()
+        window.menu.fitPoly(degree)
+        self.close()
 
 window = MainWindow()
 sys.exit(app.exec())
