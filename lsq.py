@@ -82,8 +82,9 @@ class MenuBar(QtWidgets.QMenuBar):
         return array
     
     def linLine(self):
-            global dataset
-            global ax 
+        global dataset
+        global ax 
+        if (dataset.__class__ == np.ndarray):
             array = np.c_[np.ones(dataset.shape[0]), dataset]
             A = array[:, [0,1]]
             b = array[:, [2]]
@@ -93,6 +94,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
             lineParams = np.matmul(aTrA, aTrb)
             ax.axline((0,lineParams[0][0]), slope=lineParams[1][0])
+            ax.set_title(f"y = {lineParams[1][0]}x + {lineParams[0][0]}")
             window.setPlot()
 
 window = MainWindow()
