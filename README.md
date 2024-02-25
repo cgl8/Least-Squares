@@ -53,7 +53,7 @@ where $a_i$ represents the columns of $A$ for all $i = 1,2,3,\ldots,n$. Thus:
 
 0 &=& a_i^T(\vec{b}-A\hat{\vec{x}})\\
 
-&=& A^T(\vec{b}-A\hat{\vec{x}})\ \ \ (since\ \  \vec{u}\cdot\vec{v} = \vec{u}^T\vec{v})\\
+&=& A^T(\vec{b}-A\hat{\vec{x}})\ \ \ (since\ \  \vec{u}\cdot\vec{v} = \vec{u}^T\vec{v})\\ <!-- TODO: Should equal zero vector, NOT 0. -->
 
 &=& A^T\vec{b} - A^TA\hat{\vec{x}}\\
 \\
@@ -63,4 +63,4 @@ where $a_i$ represents the columns of $A$ for all $i = 1,2,3,\ldots,n$. Thus:
 
 \end{eqnarray}
 ```
-  
+
