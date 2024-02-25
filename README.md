@@ -51,11 +51,11 @@ where $a_i$ represents the columns of $A$ for all $i = 1,2,3,\ldots,n$. Thus:
 ```math
 \begin{eqnarray}
 
-0 &=& a_i^T(\vec{b}-A\hat{\vec{x}})\\
+a_i^T(\vec{b}-A\hat{\vec{x}}) &=& 0\\
 
-&=& A^T(\vec{b}-A\hat{\vec{x}})\ \ \ (since\ \  \vec{u}\cdot\vec{v} = \vec{u}^T\vec{v})\\ <!-- TODO: Should equal zero vector, NOT 0. -->
+A^T(\vec{b}-A\hat{\vec{x}}) &=& \vec{0} \ \ \ (since\ \  \vec{u}\cdot\vec{v} = \vec{u}^T\vec{v})\\ <!-- TODO: Should equal zero vector, NOT 0. -->
 
-&=& A^T\vec{b} - A^TA\hat{\vec{x}}\\
+A^T\vec{b} - A^TA\hat{\vec{x}} &=& \vec{0}\\
 \\
 \\
 
