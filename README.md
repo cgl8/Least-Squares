@@ -5,14 +5,14 @@ A fun way to add a line of best fit to a dataset using the Least-Squares method.
 
 ## Method
 
-The parameters of the linear line of best fit $y = mx + c$ is calculated using the normal equations. 
+The parameters of a line of best fit is calculated using the normal equations. 
 Given a matrix equation $A\vec{x} = \vec{b}$, the normal equation is that which minimises the sum of the square differences:
 
 <p align="center">
 $A^TA\hat{\vec{x}} = A^T\vec{b} \;\;\;\Rightarrow \;\;\;\hat{\vec{x}} = (A^TA)^{-1}A^T\vec{b}$
 </p>
 
-This can be used with the following matrix equation to obtain the slope and intercept values that minimise cost.
+This can be used with the following matrix equations of the form $A\vec{x} = \vec{b}$ to obtain the parameters to an equation that will minimise the cost.
 ```math
 \begin{bmatrix}
 1 & x_1 \\
@@ -29,6 +29,23 @@ y_3 \\
 \vdots \\
 y_n
 \end{bmatrix}
+,\ \ \ \ \ \ \ 
+\begin{bmatrix}
+1 & ln(x_1) \\
+1 & ln(x_2) \\
+1 & ln(x_3) \\
+\vdots \\
+1 & ln(x_n)
+\end{bmatrix} \begin{bmatrix}
+c \\ m
+\end{bmatrix} = \begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+\vdots \\
+y_n
+\end{bmatrix},
+\ \ \ \ etc..
 ```
 ## Proof
 
